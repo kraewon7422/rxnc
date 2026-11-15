@@ -1,0 +1,7 @@
+# The exothermic first-order decomposition behind the classic jacketed-CSTR
+# steady-state multiplicity example (three steady states near T_coolant = 280 K).
+
+let A1 = 1.2e9       # 1/s
+let Ea = 72747       # J/mol
+
+A -> B, k: A1*exp(-Ea/(R*T)), dH: -50e3, name: "decomposition"

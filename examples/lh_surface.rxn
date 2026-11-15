@@ -1,0 +1,13 @@
+# Langmuir-Hinshelwood surface kinetics: the denominator makes this rate law
+# impossible to express as mass action, so it cannot be exported to a
+# ReactionNetwork -- but rxnc still compiles it and differentiates it exactly.
+
+let k0   = 4.0e5
+let Ea   = 25e3
+let K_C  = 0.02      # adsorption constant of the product, m3/mol
+let K_S  = 0.5       # adsorption constant of the site blocker, m3/mol
+
+species S            # blocker: appears in no reaction, only in the rate law
+
+A + B -> C, rate: k0*exp(-Ea/(R*T))*[A]*[B]/(1 + K_C*[C] + K_S*[S])^2, dH: -80e3
+C -> A + B, k: 1.0e3*exp(-40e3/(R*T)), dH: 80e3

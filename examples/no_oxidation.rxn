@@ -1,0 +1,8 @@
+# Nitric oxide oxidation, the textbook negative-activation-energy reaction.
+# Species names are real formulas, so rxnc element-balance checks both steps.
+
+species NO, O2, NO2 = NO2, N2        # N2 is an inert carrier, declared so it
+                                     # can be carried in the state vector
+
+2 NO + O2 -> 2 NO2, k: 1.3e4*exp(1050/(R*T)), dH: -114e3, name: "oxidation"
+2 NO2 -> 2 NO + O2, k: 1.0e9*(T/298.15)^0.5*exp(-111e3/(R*T)), dH: 114e3, name: "reversal"
