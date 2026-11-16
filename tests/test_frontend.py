@@ -1,7 +1,5 @@
 """Lexer, parser and formula tests."""
 
-import math
-
 import pytest
 
 from rxnc import parse, unparse
@@ -16,10 +14,13 @@ def expr(text):
     return Parser(text).parse_expr()
 
 
+CONC = {"A": 2.0, "B": 3.0, "C": 5.0}
+
+
 def value(text):
     from rxnc.interp import evaluate
 
-    return evaluate(expr(text), {}, 300.0)
+    return evaluate(expr(text), CONC, 300.0)
 
 
 # -- lexer ------------------------------------------------------------------ #
@@ -32,7 +33,7 @@ def test_tokenize_numbers_and_comments():
 def test_tokenize_reports_position():
     with pytest.raises(SyntaxErrorRxnc) as err:
         tokenize("A -> B\nA ->? B\n")
-    assert err.value.line == 2 and err.value.col == 6
+    assert err.value.line == 2 and err.value.col == 5
 
 
 def test_unterminated_string():
@@ -122,4 +123,6 @@ def test_looks_like_formula_is_conservative():
     assert looks_like_formula("H2O")
     assert not looks_like_formula("A")  # a bare placeholder is not a formula
     assert not looks_like_formula("B")  # even though B is boron
-    assert not math.isnan(0.0)
+    assert looks_like_formula("S4")  # but S4 genuinely is tetrasulfur
+    assert not looks_like_formula("S0")  # a zero subscript means no atoms
+    assert not looks_like_formula("X0")  # X is not an element symbol

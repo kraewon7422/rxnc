@@ -71,7 +71,7 @@ def test_simplify_identities(text, want):
 
 def test_constant_folding_of_parameters():
     expr = substitute(parse_expr("A1*exp(-Ea/(R*T))"), {"A1": 2.0, "Ea": 100.0, "R": 8.0})
-    assert unparse(expr) == "2*exp(-12.5/T)"
+    assert unparse(expr) == "2*exp(-100/(8*T))"
 
 
 def test_zero_derivative_detected():

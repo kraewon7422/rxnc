@@ -137,6 +137,19 @@ def test_strict_balance_demands_formulas():
         analyze_source("A -> B, k: 1\n", strict_balance=True)
 
 
+def test_element_like_names_are_read_as_formulas():
+    """S4 really is tetrasulfur, so a reaction between S-names is checked."""
+    with pytest.raises(BalanceError, match=r"S: -2"):
+        analyze_source("S4 -> S2, k: 1\n")
+
+
+def test_a_zero_subscript_is_a_label_not_a_formula():
+    """``S0`` parses as zero sulfur atoms, which is a label rather than a species."""
+    mech = analyze_source("S0 -> S3, k: 1\n")
+    assert not mech.reactions[0].balance_checked
+    assert "S0 has no formula" in mech.unbalanced_note[0]
+
+
 def test_declared_formulas_enable_checking_of_placeholder_names():
     mech = analyze_source(
         "species A = CH4, B = CH3, H = H\nA -> B + H, k: 1\n", strict_balance=True

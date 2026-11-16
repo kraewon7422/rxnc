@@ -46,9 +46,15 @@ MASS_ACTION_ONLY = {k: ALL[k] for k in ("simple", "series", "reversible", "gas_p
 
 
 def random_mechanism(seed: int, n_species: int = 5, n_reactions: int = 6) -> str:
-    """Generate a random mass-action mechanism with integer orders."""
+    """Generate a random mass-action mechanism with integer orders.
+
+    Species are named ``X0``, ``X1``, ... because those cannot be parsed as
+    chemical formulas.  Names like ``S0`` would be read as sulfur and the
+    randomly generated stoichiometry would -- correctly -- fail the element
+    balance check.
+    """
     rng = random.Random(seed)
-    names = [f"S{i}" for i in range(n_species)]
+    names = [f"X{i}" for i in range(n_species)]  # X is no element: never read as a formula
     lines = []
     for _ in range(n_reactions):
         reactants = rng.sample(names, rng.randint(1, 2))

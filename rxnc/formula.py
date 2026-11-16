@@ -78,7 +78,9 @@ def looks_like_formula(name: str) -> bool:
         counts = parse_formula(name)
     except SemanticError:
         return False
-    return bool(counts) and (any(ch.isdigit() for ch in name) or len(counts) > 1)
+    if not counts or any(v <= 0 for v in counts.values()):
+        return False  # e.g. "S0" parses as zero sulfur atoms: a label, not a formula
+    return any(ch.isdigit() for ch in name) or len(counts) > 1
 
 
 def balance_residual(
